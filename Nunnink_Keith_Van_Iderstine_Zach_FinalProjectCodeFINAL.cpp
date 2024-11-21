@@ -1,20 +1,20 @@
-//Coder/Developer: Keith Nunnink & Zach Van Iderstine
-//Class: COP 2006-80599, Fall 2024
-//Date:October 2nd, 2024
-//Description: C++ program to create user registration and login system
-//Log: 10/01/2024: Zach started defining classes for program
-//Log: 10/02/2024: Keith started working on gui/work flow code
-//Log: 10/15/2024: Keith worked on code some more
-//Log: 10/31/2024: Keith worked on code
-//Log: 11/05/2024: Keith and Zach worked on finalizing code
-//Log: 11/07/2024: Keith added unlock account and display users option
-//Log: 11/12/2024: Zach added verification to create a new user before the constructor. Moved the user map from global to main() and passed the user map into all the functions
-
+// Coder/Developer: Keith Nunnink & Zach Van Iderstine
+// Class: COP 2006-80599, Fall 2024
+// Date: October 2nd, 2024
+// Description: C++ program to create user registration and login system
+// Log: 10/01/2024: Zach started defining classes for program
+// Log: 10/02/2024: Keith started working on GUI/workflow code
+// Log: 10/15/2024: Keith worked on code some more
+// Log: 10/31/2024: Keith worked on code
+// Log: 11/05/2024: Keith and Zach worked on finalizing code
+// Log: 11/07/2024: Keith added unlock account and display users option
+// Log: 11/12/2024: Zach added verification to create a new user before the constructor. Moved the user map from global to main() and passed the user map into all the functions
 
 #include <iostream>
 #include <unordered_map>
 #include <string>
 #include <ctime>
+#include "Nunnink_Keith_Van_Iderstine_Zach_Class.h" // Include user-defined header file
 
 // Function declarations:
 void registerUser(std::unordered_map<std::string, User>& users);
@@ -27,70 +27,76 @@ void displayAllUsernames(const std::unordered_map<std::string, User>& users);
 
 int main()
 {
-    // Unordered map to store users
+    // Unordered map to store users with username as the key and User object as the value
     std::unordered_map<std::string, User> users;
 
-    while (true) {
+    while (true) { // Infinite loop to continually prompt the user
         int choice = 0;
         std::cout << "\n1. Register\n2. Login\n3. Unlock Account\n4. Display All Users\n5. Exit\nChoose an option: ";
         std::cin >> choice;
-        std::cin.ignore(); // Ignores the newline character left in the buffer
+        std::cin.ignore(); // Ignores the newline character left in the buffer to avoid input issues
 
         switch (choice) {
         case 1:
-            registerUser(users);
+            registerUser(users); // Call function to register a new user
             break;
         case 2:
-            loginUser(users);
+            loginUser(users); // Call function to login a user
             break;
         case 3:
-            unlockAccount(users);
+            unlockAccount(users); // Call function to unlock a user's account
             break;
         case 4:
-            displayAllUsernames(users);
+            displayAllUsernames(users); // Call function to display all usernames
             break;
         case 5:
             std::cout << "Exiting...\n";
-            return 0;
+            return 0; // Exit the program
         default:
-            std::cout << "Invalid choice. Please try again.\n";
+            std::cout << "Invalid choice. Please try again.\n"; // Handle invalid input
         }
     }
 
     return 0;
 }
 
-// Register a new user
+// Function to register a new user
 void registerUser(std::unordered_map<std::string, User>& users) {
     std::string name, dob, address, username, password;
     User verify;
 
     std::cout << "Enter your name: ";
     std::getline(std::cin, name);
+    // Validate name input
     while (!verify.isValidInput(4, name))
     {
-        std::cout << "Name was invalid plase try again! \n";
+        std::cout << "Name was invalid. Please try again! \n";
         std::cout << "Enter your name: ";
         std::getline(std::cin, name);
     }
+
     std::cout << "Enter your date of birth (DD/MM/YYYY): ";
     std::getline(std::cin, dob);
+    // Validate date of birth input
     while (!verify.isValidInput(2, dob))
     {
-        std::cout << "Name was invalid plase try again! \n";
+        std::cout << "Date of birth was invalid. Please try again! \n";
         std::cout << "Enter your date of birth (DD/MM/YYYY): ";
         std::getline(std::cin, dob);
     }
+
     std::cout << "Enter your email address: ";
     std::getline(std::cin, address);
+    // Validate email address input
     while (!verify.isValidInput(3, address))
     {
-        std::cout << "Name was invalid plase try again! \n";
+        std::cout << "Email address was invalid. Please try again! \n";
         std::cout << "Enter your email address: ";
         std::getline(std::cin, address);
     }
 
     bool usernameExists = false;
+    // Ensure the username is unique
     do {
         std::cout << "Create a username: ";
         std::getline(std::cin, username);
@@ -104,13 +110,15 @@ void registerUser(std::unordered_map<std::string, User>& users) {
 
     std::cout << "Create a password: ";
     std::getline(std::cin, password);
+    // Validate password input
     while (!verify.isValidInput(1, password))
     {
-        std::cout << "Name was invalid plase try again! Password must have 1 upper case, 1 lower case, 1 symbol and 1 number! \n";
+        std::cout << "Password was invalid. Please try again! Password must have 1 upper case, 1 lower case, 1 symbol, and 1 number!\n";
         std::cout << "Create a password: ";
         std::getline(std::cin, password);
     }
 
+    // Create a new user and add to the users map
     User newUser(name, dob, address, password);
     users[username] = newUser;
     std::cout << "Registration successful!\n";
@@ -126,15 +134,18 @@ bool loginUser(std::unordered_map<std::string, User>& users) {
     std::cout << "Enter your password: ";
     std::getline(std::cin, password);
 
+    // Check if the username exists
     if (users.find(username) != users.end()) {
         int loginResult = users[username].attemptLogin(password);
         if (loginResult == 1) {
+            // Display the previous login time if login is successful
             time_t loginTime = users[username].getPrevLastLoginDate();
             std::cout << "Login successful! Welcome, " << users[username].getName()
                       << ". Last login was: " << ctime(&loginTime);
             menuLoggedIn(username, users);
             return true;
         } else if (loginResult == -1) {
+            // Handle account lock due to failed login attempts
             std::cout << "Account is locked due to too many failed login attempts. Please unlock your account.\n";
             return false; // Account is locked, do nothing more
         } else {
@@ -194,6 +205,7 @@ bool changePassword(const std::string& username, std::unordered_map<std::string,
     std::cin >> newPassword;
     std::cin.ignore();
 
+    // Attempt to change the user's password
     if (users[username].changePassword(newPassword, currentPassword)) {
         std::cout << "Password changed!\n";
     } else {
@@ -209,17 +221,24 @@ bool unlockAccount(std::unordered_map<std::string, User>& users)
     std::cout << "Enter the username to unlock: ";
     std::getline(std::cin, username);
 
+    username);
+
+    // Check if the username exists
     if (users.find(username) != users.end()) {
+        // Check if the account is actually locked
         if (!users[username].isLocked()) {
             std::cout << "Account is not locked.\n";
             return false;
         }
 
+        // Verify the user's date of birth
         std::cout << "Enter date of birth for verification (DD/MM/YYYY): ";
         std::getline(std::cin, dob);
 
+        // If the date of birth matches, unlock the account
         if (users[username].getDOB() == dob) {
             users[username].unlockAccount();
+            std::cout << "Account unlocked successfully!\n";
             return true;
         } else {
             std::cout << "Date of birth does not match. Unable to unlock the account.\n";
@@ -241,4 +260,3 @@ void displayAllUsernames(const std::unordered_map<std::string, User>& users) {
     for (const auto& userPair : users) {
         std::cout << "- " << userPair.first << "\n";
     }
-}
