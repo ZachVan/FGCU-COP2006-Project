@@ -1,7 +1,7 @@
 //
 // Created by Keith Nunnink on 11/7/2024.
 //
-//Something here
+//
 #ifndef USER_H
 #define USER_H
 
@@ -51,5 +51,3 @@ class User
 };
 
 #endif // USER_H
-
-#include "Nunnink_Keith_Van_Iderstine_Zach_Class.cpp"

@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 #include <ctime> // Includes the <ctime> library for time-related functions
-//#include "Nunnink_Keith_Van_Iderstine_Zach_Class.h"
+#include "Nunnink_Keith_Van_Iderstine_Zach_Class.h"
 
 // Constructor to initialize the User object with provided data
 User::User(std::string inputName, std::string inputDOB, std::string inputEmail, std::string inputPassword)
@@ -229,3 +229,4 @@ bool User::isValidInput(int type, const std::string& str)
 bool User::isLocked()
 {
     return accountStatus != 1;
+}

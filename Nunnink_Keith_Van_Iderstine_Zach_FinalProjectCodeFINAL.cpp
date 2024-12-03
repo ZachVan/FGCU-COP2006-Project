@@ -14,7 +14,7 @@
 #include <unordered_map>
 #include <string>
 #include <ctime>
-#include "Nunnink_Keith_Van_Iderstine_Zach_Class.h" // Include user-defined header file
+#include "Nunnink_Keith_Van_Iderstine_Zach_Class.cpp" // Include user-defined header file
 
 // Function declarations:
 void registerUser(std::unordered_map<std::string, User>& users);
@@ -221,7 +221,6 @@ bool unlockAccount(std::unordered_map<std::string, User>& users)
     std::cout << "Enter the username to unlock: ";
     std::getline(std::cin, username);
 
-    username);
 
     // Check if the username exists
     if (users.find(username) != users.end()) {
@@ -260,3 +259,4 @@ void displayAllUsernames(const std::unordered_map<std::string, User>& users) {
     for (const auto& userPair : users) {
         std::cout << "- " << userPair.first << "\n";
     }
+}
